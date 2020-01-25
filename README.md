@@ -59,7 +59,7 @@ new DataTableLight({
 
 ```
 <h3>
-	[Other examples](https://demo.webexp.site/data-table-light)
+	<a href="https://demo.webexp.site/data-table-light">Other examples</a>
 </h3>
 </br>
 
