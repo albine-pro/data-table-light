@@ -37,6 +37,13 @@
                 show: 'показать',
                 search: 'поиск',
                 errorInitTable: 'Таблица не найдена'
+            },
+            de: {
+                next: 'weiter',
+                prev: 'zurück',
+                show: 'zeigen',
+                search: 'suche',
+                errorInitTable: 'Tabelle konnte nicht gefunden werden'
             }
         }
 
@@ -49,7 +56,7 @@
             rowsPerPage: 10,
             trTemplate: null,
             index: null, // для шаблонов не указывается
-            lang: 'en', // en, ru
+            lang: 'en', // en, ru, de
             responsive: false,
 			fieldsHandler: {},
 			onLayoutChange: null

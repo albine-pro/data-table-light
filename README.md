@@ -76,7 +76,7 @@ new DataTableLight({
 | rowsPerPage       | Table rows on the page                                                                                                                      | 10                  | 25, 50, 100
 | trTemplate        | Template of table row                                                                                                                       | null                | template string
 | index             | If table lines must be numbered (doesn't need with trTemplate)                                                                              | false               | true
-| lang              | Interface language                                                                                                                          | 'en'                | 'ru'             
+| lang              | Interface language                                                                                                                          | 'en'                | 'ru', 'de'            
 | responsive        | Make table responsive for mobile ( see <a href="https://demo.webexp.site/data-table-light#example-5" target="_blank">Example 5</a> )        | false               | true             
 | fieldsHandler     | Object. Takes as parameter name of field as a function and return and set new data in this field ( see demo file )                          | empty object        |  -   
 | <b>methods</b>    |                                                                                                                                             |  -                  |  -
@@ -92,4 +92,4 @@ new DataTableLight({
 
 ## License
 
-MIT         
+MIT         					
