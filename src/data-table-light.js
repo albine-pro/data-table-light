@@ -51,19 +51,23 @@
             index: null, // для шаблонов не указывается
             lang: 'en', // en, ru
             responsive: false,
+			fieldsHandler: {},
+			onLayoutChange: null
         }
 
 
         if (arguments[0] && typeof arguments[0] === "object") {
             this.options = extendDefaults(defaults, arguments[0]);
         }
+
+        this.table = document.querySelector(this.options.tableId)
 		
 		tableInit.call(this)
 
         setLang.call(this)
         setRowsPerPage.call(this)
 
-        this.table = document.querySelector(this.options.tableId)
+        
         // layout
         tableResponsive.call(this)
         theadLayout.call(this)
@@ -97,10 +101,9 @@
 			try{
 				throw new Error(this.messages.errorInitTable)
 			}catch(e){
-				console.log('Data Table Light ERROR: ',e)
+				console.log('Data Table Light ERROR: ',e.message)
 			}
-		}
-		
+		}		
 	}
 
 
@@ -156,6 +159,9 @@
     // отрисовка заголовков
     function theadLayout() {
 
+    	// если селектора таблицы нет в DOM
+    	if(!this.table){ return }
+
         const tHeadTitles = this.options.tHead
         let tHeadTemplate = `<thead><tr>`
         if (typeof tHeadTitles === 'object' && tHeadTitles.length > 0) {
@@ -168,7 +174,7 @@
         try{
             this.table.insertAdjacentHTML('beforeend', tHeadTemplate)
         }catch(e){
-            console.log('Data table Light ERROR: ',e)
+            console.log('Data table Light ERROR: ',e.message)
         }
         
 
@@ -176,11 +182,15 @@
 
     // отрисовка тела
     function tbodyLayout() {
+
+    	// если селектора таблицы нет в DOM
+    	if(!this.table){ return }
+
         try{
              this.table.insertAdjacentHTML('beforeend', `<tbody></tbody>`)
              this.tableBody = this.table.tBodies[0]           
         }catch(e){
-            console.log('Data table Light ERROR: ',e)
+            console.log('Data table Light ERROR: ',e.message)
         }
     }
 
@@ -197,6 +207,10 @@
 
 
     function addClass(el, className) {
+
+    	// если селектора нет в DOM
+    	if(!el){ return }
+
         if (className) {
             className = className.split(' ')
             let classes = []
@@ -215,8 +229,7 @@
                             el.classes += ' ' + classes
                         }
                 } catch (e) {
-                    console.log('ERROR: ', e)
-                    console.log('ERROR: ', e.message)
+                    console.log('Data table Light ERROR: ', e.message)
                 }
             }
         }
@@ -226,6 +239,8 @@
 
     // пулл ф-ций для перерисовки 
     function buildOut() {
+    	// если селектора таблицы нет в DOM
+    	if(!this.table){ return }
         dataSlice.call(this)
         redrawTable.call(this)
         addPagination.call(this)
@@ -238,6 +253,7 @@
 
         const tableBody = this.tableBody
         const data = this.filteredDataPerPage
+		const fieldsHandler = this.options.fieldsHandler
 
         // если шаблон не задан
         if (!this.options.trTemplate) {
@@ -247,6 +263,7 @@
                 const offset = this.offset                
                 const index = this.options.index
                 const optionsFields = this.options.data.fields
+				
 
                 // если переданы об-том с указанием полей вывода
                 if (typeof optionsFields !== 'undefined') {
@@ -269,7 +286,7 @@
                                     template += `<td>`
                                     if(responsive){
                                         template += tHead[q] ? `<span class="dtl-td-title">${tHead[q]}</span>` : `<span class="dtl-td-title-skip">${tHead[q]}</span>`
-                                    }                                    
+                                    } 
                                     template += `${data[i][j]}</td>`
                                 }
                             }
@@ -314,7 +331,11 @@
                 let t = this.options.trTemplate
                 item['index'] = i + this.offset + 1
                 for (let j in item) {
-                    const h = j.trim()
+                    let h = j.trim()
+					// если передана ф-ция доп обработчик полей
+					if(typeof fieldsHandler === 'object' && fieldsHandler.hasOwnProperty(j)){
+						item[h] = fieldsHandler[j](item[h])
+					}
                     const rs = '{{\\s*?' + h + '\\s*?}}'
                     const r = new RegExp(rs, 'ig')
                     t = t.replace(r, item[h])
@@ -326,7 +347,10 @@
 
 
         }
-
+		
+		if(typeof this.options.onLayoutChange === 'function'){
+			this.options.onLayoutChange()
+		}
 
     }
 

@@ -23,7 +23,7 @@ function jsTask(){
 
 function jsTaskDemo(){					
 	return src([	
-		'js/promise-polyfill.js',				
+		'polyfill/promise-polyfill.js',				
 		'js/demo.js'
 		])
 		.pipe(concat('demo.min.js'))				

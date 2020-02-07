@@ -17,12 +17,31 @@
     </tr>
 `
 
+let i = 0
+
 const dataTableLight = new DataTableLight({
     tableId: '#test_table',
     tHead: ['#','name','capital','country flag'],
     rowsPerPage: 10,
     trTemplate: template,
-    responsive: true
+    responsive: true,
+	fieldsHandler: {
+		name(fieldContent){
+			return `<span style="color: red">${fieldContent}</span>`
+		}
+	},
+	onLayoutChange(){
+		/*
+			DO SMTH AFTER:
+			
+				- table is initially loaded
+				
+				- click on prev-next-num button
+				
+				- load new data
+			
+		*/
+	}
 })
 
 
